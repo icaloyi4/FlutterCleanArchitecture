@@ -3,6 +3,11 @@ import 'package:kiwi/kiwi.dart';
 import 'package:movieapp/bloc_dependency_injection/core/database/database_module.dart';
 import 'package:movieapp/bloc_dependency_injection/core/database/movies_dao.dart';
 import 'package:movieapp/bloc_dependency_injection/core/remote/dio_module.dart';
+import 'package:movieapp/bloc_dependency_injection/feature/detail_page/bloc/detail_bloc.dart';
+import 'package:movieapp/bloc_dependency_injection/feature/detail_page/data/local/detail_local_source.dart';
+import 'package:movieapp/bloc_dependency_injection/feature/detail_page/data/remote/detail_remote_source.dart';
+import 'package:movieapp/bloc_dependency_injection/feature/detail_page/domain/repository/detail_repository.dart';
+import 'package:movieapp/bloc_dependency_injection/feature/detail_page/domain/repository/detail_repository_impl.dart';
 import 'package:movieapp/bloc_dependency_injection/feature/home_page/bloc/home_bloc.dart';
 import 'package:movieapp/bloc_dependency_injection/feature/home_page/data/local/movie_local_source.dart';
 import 'package:movieapp/bloc_dependency_injection/feature/home_page/data/remote/movie_remote_source.dart';
@@ -21,6 +26,12 @@ abstract class Injection {
       from: MovieRepositoryImpl,
       resolvers: {MovieRemoteSource: null, MovieLocalSource: null})
   @Register.factory(HomeBloc, resolvers: {MovieRepository: null})
+  @Register.singleton(DetailRemoteSource, resolvers: {Dio: null})
+  @Register.singleton(DetailLocalSource, resolvers: {MoviesDao: null})
+  @Register.singleton(DetailRepository,
+      from: DetailRepositoryImpl,
+      resolvers: {DetailRemoteSource: null, DetailLocalSource: null})
+  @Register.factory(DetailBloc, resolvers: {DetailRepository: null})
   void configure();
 }
 

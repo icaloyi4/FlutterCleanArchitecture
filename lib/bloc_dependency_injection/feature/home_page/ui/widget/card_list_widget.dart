@@ -5,6 +5,7 @@ import 'package:kiwi/kiwi.dart';
 import 'package:movieapp/bloc_dependency_injection/core/base/base_stateful.dart';
 import 'package:movieapp/bloc_dependency_injection/core/database/database_module.dart';
 import 'package:movieapp/bloc_dependency_injection/core/remote/dio_model.dart';
+import 'package:movieapp/bloc_dependency_injection/core/routing/routing.dart';
 import 'package:movieapp/bloc_dependency_injection/feature/home_page/bloc/home_bloc.dart';
 import 'package:shimmer/shimmer.dart';
 
@@ -103,10 +104,10 @@ class _CardListWidget extends BaseState<HomeBloc, HomeState, CardListWidget> {
           itemBuilder: (ctx, pos) {
             Movie movie = _movie[pos];
             return GestureDetector(
-              // onTap: () {
-              //   Navigator.pushNamed(context, Routing.DETAIL_MOVIE,
-              //       arguments: movie);
-              // },
+              onTap: () {
+                Navigator.pushNamed(context, Routing.DETAIL_MOVIE,
+                    arguments: movie);
+              },
               child: Card(
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8.0),
