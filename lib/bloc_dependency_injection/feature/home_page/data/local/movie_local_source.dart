@@ -25,4 +25,8 @@ class MovieLocalSource {
   Future<List<Movie>> getAllMovie() async {
     return await _moviesDao.getAllMovie();
   }
+
+  Future<List<Movie>> getAllMovieByType(String type) async {
+    return await _moviesDao.getAllMovieByType(type);
+  }
 }

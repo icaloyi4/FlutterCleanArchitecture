@@ -1,9 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:kiwi/kiwi.dart';
-import 'package:movieapp/bloc_dependency_injection/core/base/base_stateful.dart';
 import 'package:movieapp/bloc_dependency_injection/core/database/database_module.dart';
-import 'package:movieapp/bloc_dependency_injection/feature/home_page/bloc/home_bloc.dart';
 import 'package:movieapp/bloc_dependency_injection/feature/home_page/ui/widget/card_banner_widget.dart';
 import 'package:movieapp/bloc_dependency_injection/feature/home_page/ui/widget/card_list_widget.dart';
 
@@ -28,7 +25,18 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     _context = context;
     return Scaffold(
-      appBar: AppBar(title: Text('Home Screen')),
+      appBar: AppBar(
+        title: Text('Movie Home'),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.favorite_rounded),
+            tooltip: "Save Todo and Retrun to List",
+            onPressed: () {
+              // save();
+            },
+          )
+        ],
+      ),
       body: Container(
         child: _home(),
         // child: StreamBuilder<HomeState>(

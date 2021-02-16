@@ -20,6 +20,8 @@ class CardBannerWidget extends StatefulWidget {
 
 class _CardBannerWidget
     extends BaseState<HomeBloc, HomeState, CardBannerWidget> {
+  int page = 1;
+  ScrollController _scrollController = new ScrollController();
   @override
   HomeBloc initBloc() {
     return KiwiContainer().resolve<HomeBloc>();
@@ -28,7 +30,7 @@ class _CardBannerWidget
   @override
   void initState() {
     super.initState();
-    bloc.pushEvent(GetDiscoverMovieEvent(page: 1));
+    bloc.pushEvent(GetDiscoverMovieEvent());
   }
 
   @override
@@ -60,94 +62,112 @@ class _CardBannerWidget
   Widget list(List<Movie> _movie) {
     double _height = widget.height;
     double _widht = widget.widht;
-    return ListView.builder(
-        scrollDirection: Axis.horizontal,
-        padding: EdgeInsets.symmetric(horizontal: 8),
-        itemCount: _movie.length ?? 0,
-        itemBuilder: (ctx, pos) {
-          Movie movie = _movie[pos];
-          return GestureDetector(
-            // onTap: () {
-            //   Navigator.pushNamed(context, Routing.DETAIL_MOVIE,
-            //       arguments: movie);
-            // },
-            child: Card(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8.0),
-              ),
-              child: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Container(
+    return NotificationListener<ScrollEndNotification>(
+      onNotification: (scrollEnd) {
+        var metrics = scrollEnd.metrics;
+        if (metrics.atEdge) {
+          if (metrics.pixels == 0) {
+            print('At top');
+          } else {
+            print('At bottom');
+            bloc.pushEvent(LoadMoreMovieEvent(type: 'now'));
+          }
+          // bloc.pageDiscover++;
+          // bloc.pushEvent(GetDiscoverMovieEvent());
+        }
+        return true;
+      },
+      child: ListView.builder(
+          controller: _scrollController,
+          scrollDirection: Axis.horizontal,
+          padding: EdgeInsets.symmetric(horizontal: 8),
+          itemCount: _movie.length ?? 0,
+          itemBuilder: (ctx, pos) {
+            Movie movie = _movie[pos];
+            return GestureDetector(
+              // onTap: () {
+              //   Navigator.pushNamed(context, Routing.DETAIL_MOVIE,
+              //       arguments: movie);
+              // },
+              child: Card(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8.0),
+                ),
+                child: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Container(
+                          width: _widht * 80 / 100,
+                          height: _height * 70 / 100,
+                          child: CachedNetworkImage(
+                            imageUrl:
+                                '${ApiUrl.IMAGE_URL}${movie.backdropPath}',
+                            fit: BoxFit.cover,
+                          )),
+                      SizedBox(height: 4.0),
+                      Container(
                         width: _widht * 80 / 100,
-                        height: _height * 70 / 100,
-                        child: CachedNetworkImage(
-                          imageUrl: '${ApiUrl.IMAGE_URL}${movie.backdropPath}',
-                          fit: BoxFit.cover,
-                        )),
-                    SizedBox(height: 4.0),
-                    Container(
-                      width: _widht * 80 / 100,
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Container(
-                              width: _widht * 50 / 100,
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: <Widget>[
-                                  Text(
-                                    movie.title,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: TextStyle(
-                                      color: Colors.blue,
-                                      fontSize: 16.0,
-                                      fontWeight: FontWeight.bold,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Container(
+                                width: _widht * 50 / 100,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: <Widget>[
+                                    Text(
+                                      movie.title,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(
+                                        color: Colors.blue,
+                                        fontSize: 16.0,
+                                        fontWeight: FontWeight.bold,
+                                      ),
                                     ),
-                                  ),
-                                  SizedBox(
-                                    height: 4.0,
-                                  ),
-                                  Text(
-                                    'Date Release: ${movie.releaseDate}',
-                                    style: TextStyle(
-                                      fontStyle: FontStyle.italic,
+                                    SizedBox(
+                                      height: 4.0,
                                     ),
-                                  ),
-                                ],
+                                    Text(
+                                      'Date Release: ${movie.releaseDate}',
+                                      style: TextStyle(
+                                        fontStyle: FontStyle.italic,
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
-                            ),
-                            Expanded(
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    movie.voteAverage.toString(),
-                                    style: TextStyle(
-                                        color: Colors.amber, fontSize: 20),
-                                  ),
-                                  Text(
-                                    '${movie.voteCount} People Vote',
-                                    style: TextStyle(fontSize: 8),
-                                  ),
-                                ],
-                              ),
-                            )
-                          ],
+                              Expanded(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      movie.voteAverage.toString(),
+                                      style: TextStyle(
+                                          color: Colors.amber, fontSize: 20),
+                                    ),
+                                    Text(
+                                      '${movie.voteCount} People Vote',
+                                      style: TextStyle(fontSize: 8),
+                                    ),
+                                  ],
+                                ),
+                              )
+                            ],
+                          ),
                         ),
-                      ),
-                    )
-                  ],
+                      )
+                    ],
+                  ),
                 ),
               ),
-            ),
-          );
-        });
+            );
+          }),
+    );
   }
 
   Widget _errorText(String message) {

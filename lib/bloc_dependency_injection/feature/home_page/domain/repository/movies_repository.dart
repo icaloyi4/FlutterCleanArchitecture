@@ -7,4 +7,9 @@ abstract class MovieRepository {
       @required String type,
       Function(List<Movie> movieList) onSuccess,
       Function(String message, List<Movie> movieList) onError});
+  Future<void> moreSourceOfTruth(
+      {@required int page,
+      @required String type,
+      Function(List<Movie> movieList) onSuccess,
+      Function(String message, List<Movie> movieList) onError});
 }

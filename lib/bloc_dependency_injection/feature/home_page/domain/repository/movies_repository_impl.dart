@@ -18,7 +18,7 @@ class MovieRepositoryImpl implements MovieRepository {
       @required String type,
       Function(List<Movie> movieList) onSuccess,
       Function(String message, List<Movie> movieList) onError}) async {
-    var movies = await _localSource.getAllMovie();
+    var movies = await _localSource.getAllMovieByType(type);
     onSuccess(movies);
 
     var result;
@@ -36,7 +36,8 @@ class MovieRepositoryImpl implements MovieRepository {
         result = await _remoteSource.fetchDiscoverMovies(page);
     }
 
-    responseHandler<MovieResponse>(result, onSuccess: (MovieResponse response) {
+    responseHandler<MovieResponse>(result,
+        onSuccess: (MovieResponse response) async {
       _localSource.deleteMovieByType(type);
       movies = response.results.map((element) {
         Movie movie = Movie(
@@ -53,6 +54,54 @@ class MovieRepositoryImpl implements MovieRepository {
         _localSource.insertMovie(movie);
         return movie;
       }).toList();
+      onSuccess(movies);
+    }, onError: (dioError, code, errorBody) {
+      onError("Error : $code ==> $errorBody", movies);
+    });
+  }
+
+  @override
+  Future<void> moreSourceOfTruth(
+      {@required int page,
+      @required String type,
+      Function(List<Movie> movieList) onSuccess,
+      Function(String message, List<Movie> movieList) onError}) async {
+    var movies;
+    // onSuccess(movies);
+
+    var result;
+    switch (type) {
+      case 'now':
+        result = await _remoteSource.fetchDiscoverMovies(page);
+        break;
+      case 'popular':
+        result = await _remoteSource.fetchPopularMovies(page);
+        break;
+      case 'upcoming':
+        result = await _remoteSource.fetchUpcomingMovies(page);
+        break;
+    }
+
+    responseHandler<MovieResponse>(result,
+        onSuccess: (MovieResponse response) async {
+      var movies = await _localSource.getAllMovieByType(type);
+
+      var moviesRemote = response.results.map((element) {
+        Movie movie = Movie(
+            movieId: element.id,
+            voteCount: element.voteCount,
+            title: element.title,
+            posterPath: element.posterPath,
+            backdropPath: element.backdropPath,
+            overview: element.overview,
+            releaseDate: element.releaseDate,
+            id: null,
+            typeMovie: type,
+            voteAverage: element.voteAverage.toString());
+        _localSource.insertMovie(movie);
+        return movie;
+      }).toList();
+      movies.addAll(moviesRemote);
       onSuccess(movies);
     }, onError: (dioError, code, errorBody) {
       onError("Error : $code ==> $errorBody", movies);

@@ -30,10 +30,10 @@ class _CardListWidget extends BaseState<HomeBloc, HomeState, CardListWidget> {
   void initState() {
     super.initState();
     if (widget.type == 'popular') {
-      bloc.pushEvent(GetPopularMovieEvent(page: 1));
+      bloc.pushEvent(GetPopularMovieEvent());
     }
     if (widget.type == 'upcoming') {
-      bloc.pushEvent(GetUpcomingMovieEvent(page: 1));
+      bloc.pushEvent(GetUpcomingMovieEvent());
     }
   }
 
@@ -76,70 +76,92 @@ class _CardListWidget extends BaseState<HomeBloc, HomeState, CardListWidget> {
     double _widht;
     _height = widget.height;
     _widht = widget.widht;
-    return ListView.builder(
-        scrollDirection: Axis.horizontal,
-        padding: EdgeInsets.symmetric(horizontal: 8),
-        itemCount: _movie.length ?? 0,
-        itemBuilder: (ctx, pos) {
-          Movie movie = _movie[pos];
-          return GestureDetector(
-            // onTap: () {
-            //   Navigator.pushNamed(context, Routing.DETAIL_MOVIE,
-            //       arguments: movie);
-            // },
-            child: Card(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8.0),
-              ),
-              child: Container(
-                width: _widht,
-                child: SingleChildScrollView(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Container(
-                          width: _widht,
-                          height: _height * 70 / 100,
-                          child: CachedNetworkImage(
-                            imageUrl: '${ApiUrl.IMAGE_URL}${movie.posterPath}',
-                            fit: BoxFit.cover,
-                          )),
-                      SizedBox(height: 4.0),
-                      Container(
-                        margin: EdgeInsets.fromLTRB(8.0, 4.0, 8.0, 8.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Text(
-                              movie.title,
-                              overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
-                                color: Colors.blue,
-                                fontSize: 12.0,
-                                fontWeight: FontWeight.bold,
+    return NotificationListener<ScrollEndNotification>(
+      onNotification: (scrollEnd) {
+        var metrics = scrollEnd.metrics;
+        if (metrics.atEdge) {
+          if (metrics.pixels == 0) {
+            print('At top');
+          } else {
+            print('At bottom');
+            if (widget.type == 'popular') {
+              bloc.pushEvent(LoadMoreMovieEvent(type: 'popular'));
+            }
+            if (widget.type == 'upcoming') {
+              bloc.pushEvent(LoadMoreMovieEvent(type: 'upcoming'));
+            }
+          }
+          // bloc.pageDiscover++;
+          // bloc.pushEvent(GetDiscoverMovieEvent());
+        }
+        return true;
+      },
+      child: ListView.builder(
+          scrollDirection: Axis.horizontal,
+          padding: EdgeInsets.symmetric(horizontal: 8),
+          itemCount: _movie.length ?? 0,
+          itemBuilder: (ctx, pos) {
+            Movie movie = _movie[pos];
+            return GestureDetector(
+              // onTap: () {
+              //   Navigator.pushNamed(context, Routing.DETAIL_MOVIE,
+              //       arguments: movie);
+              // },
+              child: Card(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8.0),
+                ),
+                child: Container(
+                  width: _widht,
+                  child: SingleChildScrollView(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Container(
+                            width: _widht,
+                            height: _height * 70 / 100,
+                            child: CachedNetworkImage(
+                              imageUrl:
+                                  '${ApiUrl.IMAGE_URL}${movie.posterPath}',
+                              fit: BoxFit.cover,
+                            )),
+                        SizedBox(height: 4.0),
+                        Container(
+                          margin: EdgeInsets.fromLTRB(8.0, 4.0, 8.0, 8.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Text(
+                                movie.title,
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                  color: Colors.blue,
+                                  fontSize: 12.0,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
-                            ),
-                            SizedBox(
-                              height: 4.0,
-                            ),
-                            Text(
-                              '${movie.releaseDate}',
-                              overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
-                                fontSize: 10.0,
-                                fontStyle: FontStyle.italic,
+                              SizedBox(
+                                height: 4.0,
                               ),
-                            ),
-                          ],
-                        ),
-                      )
-                    ],
+                              Text(
+                                '${movie.releaseDate}',
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                  fontSize: 10.0,
+                                  fontStyle: FontStyle.italic,
+                                ),
+                              ),
+                            ],
+                          ),
+                        )
+                      ],
+                    ),
                   ),
                 ),
               ),
-            ),
-          );
-        });
+            );
+          }),
+    );
   }
 
   Widget _errorText(String message) {
