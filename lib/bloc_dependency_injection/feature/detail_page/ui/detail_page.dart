@@ -6,6 +6,7 @@ import 'package:movieapp/bloc_dependency_injection/core/base/base_stateful.dart'
 import 'package:movieapp/bloc_dependency_injection/core/database/database_module.dart';
 import 'package:movieapp/bloc_dependency_injection/core/remote/dio_model.dart';
 import 'package:movieapp/bloc_dependency_injection/feature/detail_page/bloc/detail_bloc.dart';
+import 'package:movieapp/bloc_dependency_injection/feature/detail_page/ui/widget/list_review.dart';
 
 class DetailScreen extends StatefulWidget {
   final Movie movie;
@@ -207,6 +208,19 @@ class _DetailScreen extends BaseState<DetailBloc, DetailState, DetailScreen> {
           Text(
             widget.movie.overview,
           ),
+          SizedBox(
+            height: 10,
+          ),
+          Text(
+            'Review',
+            overflow: TextOverflow.ellipsis,
+            style: TextStyle(
+              color: Colors.blue,
+              fontSize: 24.0,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          ListReview(movie: widget.movie)
         ],
       ),
     );
