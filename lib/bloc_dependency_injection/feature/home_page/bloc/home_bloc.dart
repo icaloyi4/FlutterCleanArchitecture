@@ -19,18 +19,53 @@ class HomeBloc extends BaseBloc<HomeEvent, HomeState> {
   void mapEventToState(HomeEvent event) {
     if (event is GetDiscoverMovieEvent && !isOnProcess) {
       isOnProcess = true;
-      _getDiscover();
+      _getDiscover(event);
+    }
+    if (event is GetPopularMovieEvent && !isOnProcess) {
+      isOnProcess = true;
+      _getPopular(event);
+    }
+    if (event is GetUpcomingMovieEvent && !isOnProcess) {
+      isOnProcess = true;
+      _getUpcoming(event);
     }
   }
 
-  void _getDiscover() async {
+  void _getDiscover(GetDiscoverMovieEvent event) async {
     await _repos.singleSourceOfTruth(
-        page: 1,
+        page: event.page,
+        type: 'now',
         onSuccess: (movieList) {
           emitState(SuccessGetDiscoverState(movieList));
         },
         onError: (message, movieList) {
           emitState(FailedGetDiscoverState(message, movieList));
+        });
+    isOnProcess = false;
+  }
+
+  void _getPopular(GetPopularMovieEvent event) async {
+    await _repos.singleSourceOfTruth(
+        page: event.page,
+        type: 'popular',
+        onSuccess: (movieList) {
+          emitState(SuccessGetPopularState(movieList));
+        },
+        onError: (message, movieList) {
+          emitState(FailedGetPopularState(message, movieList));
+        });
+    isOnProcess = false;
+  }
+
+  void _getUpcoming(GetUpcomingMovieEvent event) async {
+    await _repos.singleSourceOfTruth(
+        page: event.page,
+        type: 'upcoming',
+        onSuccess: (movieList) {
+          emitState(SuccessGetUpcomingState(movieList));
+        },
+        onError: (message, movieList) {
+          emitState(FailedGetUpcomingState(message, movieList));
         });
     isOnProcess = false;
   }

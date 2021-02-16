@@ -15,15 +15,29 @@ class MovieRepositoryImpl implements MovieRepository {
   @override
   Future<void> singleSourceOfTruth(
       {@required int page,
+      @required String type,
       Function(List<Movie> movieList) onSuccess,
       Function(String message, List<Movie> movieList) onError}) async {
     var movies = await _localSource.getAllMovie();
     onSuccess(movies);
 
-    final result = await _remoteSource.fetchDiscoverMovies(page);
+    var result;
+    switch (type) {
+      case 'now':
+        result = await _remoteSource.fetchDiscoverMovies(page);
+        break;
+      case 'popular':
+        result = await _remoteSource.fetchPopularMovies(page);
+        break;
+      case 'upcoming':
+        result = await _remoteSource.fetchUpcomingMovies(page);
+        break;
+      default:
+        result = await _remoteSource.fetchDiscoverMovies(page);
+    }
 
     responseHandler<MovieResponse>(result, onSuccess: (MovieResponse response) {
-      _localSource.deleteAllMovie();
+      _localSource.deleteMovieByType(type);
       movies = response.results.map((element) {
         Movie movie = Movie(
             movieId: element.id,
@@ -33,7 +47,9 @@ class MovieRepositoryImpl implements MovieRepository {
             backdropPath: element.backdropPath,
             overview: element.overview,
             releaseDate: element.releaseDate,
-            id: null);
+            id: null,
+            typeMovie: type,
+            voteAverage: element.voteAverage.toString());
         _localSource.insertMovie(movie);
         return movie;
       }).toList();

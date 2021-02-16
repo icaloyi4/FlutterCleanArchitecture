@@ -11,20 +11,24 @@ class Movie extends DataClass implements Insertable<Movie> {
   final int id;
   final int movieId;
   final int voteCount;
+  final String voteAverage;
   final String title;
   final String posterPath;
   final String backdropPath;
   final String overview;
   final String releaseDate;
+  final String typeMovie;
   Movie(
       {@required this.id,
       @required this.movieId,
       @required this.voteCount,
+      @required this.voteAverage,
       @required this.title,
       @required this.posterPath,
       @required this.backdropPath,
       @required this.overview,
-      @required this.releaseDate});
+      @required this.releaseDate,
+      @required this.typeMovie});
   factory Movie.fromData(Map<String, dynamic> data, GeneratedDatabase db,
       {String prefix}) {
     final effectivePrefix = prefix ?? '';
@@ -36,6 +40,8 @@ class Movie extends DataClass implements Insertable<Movie> {
           intType.mapFromDatabaseResponse(data['${effectivePrefix}movie_id']),
       voteCount:
           intType.mapFromDatabaseResponse(data['${effectivePrefix}vote_count']),
+      voteAverage: stringType
+          .mapFromDatabaseResponse(data['${effectivePrefix}vote_average']),
       title:
           stringType.mapFromDatabaseResponse(data['${effectivePrefix}title']),
       posterPath: stringType
@@ -46,6 +52,8 @@ class Movie extends DataClass implements Insertable<Movie> {
           .mapFromDatabaseResponse(data['${effectivePrefix}overview']),
       releaseDate: stringType
           .mapFromDatabaseResponse(data['${effectivePrefix}release_date']),
+      typeMovie: stringType
+          .mapFromDatabaseResponse(data['${effectivePrefix}type_movie']),
     );
   }
   @override
@@ -59,6 +67,9 @@ class Movie extends DataClass implements Insertable<Movie> {
     }
     if (!nullToAbsent || voteCount != null) {
       map['vote_count'] = Variable<int>(voteCount);
+    }
+    if (!nullToAbsent || voteAverage != null) {
+      map['vote_average'] = Variable<String>(voteAverage);
     }
     if (!nullToAbsent || title != null) {
       map['title'] = Variable<String>(title);
@@ -75,6 +86,9 @@ class Movie extends DataClass implements Insertable<Movie> {
     if (!nullToAbsent || releaseDate != null) {
       map['release_date'] = Variable<String>(releaseDate);
     }
+    if (!nullToAbsent || typeMovie != null) {
+      map['type_movie'] = Variable<String>(typeMovie);
+    }
     return map;
   }
 
@@ -87,6 +101,9 @@ class Movie extends DataClass implements Insertable<Movie> {
       voteCount: voteCount == null && nullToAbsent
           ? const Value.absent()
           : Value(voteCount),
+      voteAverage: voteAverage == null && nullToAbsent
+          ? const Value.absent()
+          : Value(voteAverage),
       title:
           title == null && nullToAbsent ? const Value.absent() : Value(title),
       posterPath: posterPath == null && nullToAbsent
@@ -101,6 +118,9 @@ class Movie extends DataClass implements Insertable<Movie> {
       releaseDate: releaseDate == null && nullToAbsent
           ? const Value.absent()
           : Value(releaseDate),
+      typeMovie: typeMovie == null && nullToAbsent
+          ? const Value.absent()
+          : Value(typeMovie),
     );
   }
 
@@ -111,11 +131,13 @@ class Movie extends DataClass implements Insertable<Movie> {
       id: serializer.fromJson<int>(json['id']),
       movieId: serializer.fromJson<int>(json['movieId']),
       voteCount: serializer.fromJson<int>(json['voteCount']),
+      voteAverage: serializer.fromJson<String>(json['voteAverage']),
       title: serializer.fromJson<String>(json['title']),
       posterPath: serializer.fromJson<String>(json['posterPath']),
       backdropPath: serializer.fromJson<String>(json['backdropPath']),
       overview: serializer.fromJson<String>(json['overview']),
       releaseDate: serializer.fromJson<String>(json['releaseDate']),
+      typeMovie: serializer.fromJson<String>(json['typeMovie']),
     );
   }
   @override
@@ -125,11 +147,13 @@ class Movie extends DataClass implements Insertable<Movie> {
       'id': serializer.toJson<int>(id),
       'movieId': serializer.toJson<int>(movieId),
       'voteCount': serializer.toJson<int>(voteCount),
+      'voteAverage': serializer.toJson<String>(voteAverage),
       'title': serializer.toJson<String>(title),
       'posterPath': serializer.toJson<String>(posterPath),
       'backdropPath': serializer.toJson<String>(backdropPath),
       'overview': serializer.toJson<String>(overview),
       'releaseDate': serializer.toJson<String>(releaseDate),
+      'typeMovie': serializer.toJson<String>(typeMovie),
     };
   }
 
@@ -137,20 +161,24 @@ class Movie extends DataClass implements Insertable<Movie> {
           {int id,
           int movieId,
           int voteCount,
+          String voteAverage,
           String title,
           String posterPath,
           String backdropPath,
           String overview,
-          String releaseDate}) =>
+          String releaseDate,
+          String typeMovie}) =>
       Movie(
         id: id ?? this.id,
         movieId: movieId ?? this.movieId,
         voteCount: voteCount ?? this.voteCount,
+        voteAverage: voteAverage ?? this.voteAverage,
         title: title ?? this.title,
         posterPath: posterPath ?? this.posterPath,
         backdropPath: backdropPath ?? this.backdropPath,
         overview: overview ?? this.overview,
         releaseDate: releaseDate ?? this.releaseDate,
+        typeMovie: typeMovie ?? this.typeMovie,
       );
   @override
   String toString() {
@@ -158,11 +186,13 @@ class Movie extends DataClass implements Insertable<Movie> {
           ..write('id: $id, ')
           ..write('movieId: $movieId, ')
           ..write('voteCount: $voteCount, ')
+          ..write('voteAverage: $voteAverage, ')
           ..write('title: $title, ')
           ..write('posterPath: $posterPath, ')
           ..write('backdropPath: $backdropPath, ')
           ..write('overview: $overview, ')
-          ..write('releaseDate: $releaseDate')
+          ..write('releaseDate: $releaseDate, ')
+          ..write('typeMovie: $typeMovie')
           ..write(')'))
         .toString();
   }
@@ -175,11 +205,17 @@ class Movie extends DataClass implements Insertable<Movie> {
           $mrjc(
               voteCount.hashCode,
               $mrjc(
-                  title.hashCode,
+                  voteAverage.hashCode,
                   $mrjc(
-                      posterPath.hashCode,
-                      $mrjc(backdropPath.hashCode,
-                          $mrjc(overview.hashCode, releaseDate.hashCode))))))));
+                      title.hashCode,
+                      $mrjc(
+                          posterPath.hashCode,
+                          $mrjc(
+                              backdropPath.hashCode,
+                              $mrjc(
+                                  overview.hashCode,
+                                  $mrjc(releaseDate.hashCode,
+                                      typeMovie.hashCode))))))))));
   @override
   bool operator ==(dynamic other) =>
       identical(this, other) ||
@@ -187,67 +223,81 @@ class Movie extends DataClass implements Insertable<Movie> {
           other.id == this.id &&
           other.movieId == this.movieId &&
           other.voteCount == this.voteCount &&
+          other.voteAverage == this.voteAverage &&
           other.title == this.title &&
           other.posterPath == this.posterPath &&
           other.backdropPath == this.backdropPath &&
           other.overview == this.overview &&
-          other.releaseDate == this.releaseDate);
+          other.releaseDate == this.releaseDate &&
+          other.typeMovie == this.typeMovie);
 }
 
 class MoviesCompanion extends UpdateCompanion<Movie> {
   final Value<int> id;
   final Value<int> movieId;
   final Value<int> voteCount;
+  final Value<String> voteAverage;
   final Value<String> title;
   final Value<String> posterPath;
   final Value<String> backdropPath;
   final Value<String> overview;
   final Value<String> releaseDate;
+  final Value<String> typeMovie;
   const MoviesCompanion({
     this.id = const Value.absent(),
     this.movieId = const Value.absent(),
     this.voteCount = const Value.absent(),
+    this.voteAverage = const Value.absent(),
     this.title = const Value.absent(),
     this.posterPath = const Value.absent(),
     this.backdropPath = const Value.absent(),
     this.overview = const Value.absent(),
     this.releaseDate = const Value.absent(),
+    this.typeMovie = const Value.absent(),
   });
   MoviesCompanion.insert({
     this.id = const Value.absent(),
     @required int movieId,
     @required int voteCount,
+    @required String voteAverage,
     @required String title,
     @required String posterPath,
     @required String backdropPath,
     @required String overview,
     @required String releaseDate,
+    @required String typeMovie,
   })  : movieId = Value(movieId),
         voteCount = Value(voteCount),
+        voteAverage = Value(voteAverage),
         title = Value(title),
         posterPath = Value(posterPath),
         backdropPath = Value(backdropPath),
         overview = Value(overview),
-        releaseDate = Value(releaseDate);
+        releaseDate = Value(releaseDate),
+        typeMovie = Value(typeMovie);
   static Insertable<Movie> custom({
     Expression<int> id,
     Expression<int> movieId,
     Expression<int> voteCount,
+    Expression<String> voteAverage,
     Expression<String> title,
     Expression<String> posterPath,
     Expression<String> backdropPath,
     Expression<String> overview,
     Expression<String> releaseDate,
+    Expression<String> typeMovie,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
       if (movieId != null) 'movie_id': movieId,
       if (voteCount != null) 'vote_count': voteCount,
+      if (voteAverage != null) 'vote_average': voteAverage,
       if (title != null) 'title': title,
       if (posterPath != null) 'poster_path': posterPath,
       if (backdropPath != null) 'backdrop_path': backdropPath,
       if (overview != null) 'overview': overview,
       if (releaseDate != null) 'release_date': releaseDate,
+      if (typeMovie != null) 'type_movie': typeMovie,
     });
   }
 
@@ -255,20 +305,24 @@ class MoviesCompanion extends UpdateCompanion<Movie> {
       {Value<int> id,
       Value<int> movieId,
       Value<int> voteCount,
+      Value<String> voteAverage,
       Value<String> title,
       Value<String> posterPath,
       Value<String> backdropPath,
       Value<String> overview,
-      Value<String> releaseDate}) {
+      Value<String> releaseDate,
+      Value<String> typeMovie}) {
     return MoviesCompanion(
       id: id ?? this.id,
       movieId: movieId ?? this.movieId,
       voteCount: voteCount ?? this.voteCount,
+      voteAverage: voteAverage ?? this.voteAverage,
       title: title ?? this.title,
       posterPath: posterPath ?? this.posterPath,
       backdropPath: backdropPath ?? this.backdropPath,
       overview: overview ?? this.overview,
       releaseDate: releaseDate ?? this.releaseDate,
+      typeMovie: typeMovie ?? this.typeMovie,
     );
   }
 
@@ -283,6 +337,9 @@ class MoviesCompanion extends UpdateCompanion<Movie> {
     }
     if (voteCount.present) {
       map['vote_count'] = Variable<int>(voteCount.value);
+    }
+    if (voteAverage.present) {
+      map['vote_average'] = Variable<String>(voteAverage.value);
     }
     if (title.present) {
       map['title'] = Variable<String>(title.value);
@@ -299,6 +356,9 @@ class MoviesCompanion extends UpdateCompanion<Movie> {
     if (releaseDate.present) {
       map['release_date'] = Variable<String>(releaseDate.value);
     }
+    if (typeMovie.present) {
+      map['type_movie'] = Variable<String>(typeMovie.value);
+    }
     return map;
   }
 
@@ -308,11 +368,13 @@ class MoviesCompanion extends UpdateCompanion<Movie> {
           ..write('id: $id, ')
           ..write('movieId: $movieId, ')
           ..write('voteCount: $voteCount, ')
+          ..write('voteAverage: $voteAverage, ')
           ..write('title: $title, ')
           ..write('posterPath: $posterPath, ')
           ..write('backdropPath: $backdropPath, ')
           ..write('overview: $overview, ')
-          ..write('releaseDate: $releaseDate')
+          ..write('releaseDate: $releaseDate, ')
+          ..write('typeMovie: $typeMovie')
           ..write(')'))
         .toString();
   }
@@ -350,6 +412,20 @@ class $MoviesTable extends Movies with TableInfo<$MoviesTable, Movie> {
   GeneratedIntColumn _constructVoteCount() {
     return GeneratedIntColumn(
       'vote_count',
+      $tableName,
+      false,
+    );
+  }
+
+  final VerificationMeta _voteAverageMeta =
+      const VerificationMeta('voteAverage');
+  GeneratedTextColumn _voteAverage;
+  @override
+  GeneratedTextColumn get voteAverage =>
+      _voteAverage ??= _constructVoteAverage();
+  GeneratedTextColumn _constructVoteAverage() {
+    return GeneratedTextColumn(
+      'vote_average',
       $tableName,
       false,
     );
@@ -419,16 +495,30 @@ class $MoviesTable extends Movies with TableInfo<$MoviesTable, Movie> {
     );
   }
 
+  final VerificationMeta _typeMovieMeta = const VerificationMeta('typeMovie');
+  GeneratedTextColumn _typeMovie;
+  @override
+  GeneratedTextColumn get typeMovie => _typeMovie ??= _constructTypeMovie();
+  GeneratedTextColumn _constructTypeMovie() {
+    return GeneratedTextColumn(
+      'type_movie',
+      $tableName,
+      false,
+    );
+  }
+
   @override
   List<GeneratedColumn> get $columns => [
         id,
         movieId,
         voteCount,
+        voteAverage,
         title,
         posterPath,
         backdropPath,
         overview,
-        releaseDate
+        releaseDate,
+        typeMovie
       ];
   @override
   $MoviesTable get asDslTable => this;
@@ -455,6 +545,14 @@ class $MoviesTable extends Movies with TableInfo<$MoviesTable, Movie> {
           voteCount.isAcceptableOrUnknown(data['vote_count'], _voteCountMeta));
     } else if (isInserting) {
       context.missing(_voteCountMeta);
+    }
+    if (data.containsKey('vote_average')) {
+      context.handle(
+          _voteAverageMeta,
+          voteAverage.isAcceptableOrUnknown(
+              data['vote_average'], _voteAverageMeta));
+    } else if (isInserting) {
+      context.missing(_voteAverageMeta);
     }
     if (data.containsKey('title')) {
       context.handle(
@@ -491,6 +589,12 @@ class $MoviesTable extends Movies with TableInfo<$MoviesTable, Movie> {
               data['release_date'], _releaseDateMeta));
     } else if (isInserting) {
       context.missing(_releaseDateMeta);
+    }
+    if (data.containsKey('type_movie')) {
+      context.handle(_typeMovieMeta,
+          typeMovie.isAcceptableOrUnknown(data['type_movie'], _typeMovieMeta));
+    } else if (isInserting) {
+      context.missing(_typeMovieMeta);
     }
     return context;
   }

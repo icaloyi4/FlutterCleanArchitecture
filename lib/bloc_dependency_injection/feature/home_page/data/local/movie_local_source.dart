@@ -18,6 +18,10 @@ class MovieLocalSource {
     await _moviesDao.deleteAllMovie();
   }
 
+  Future deleteMovieByType(String type) async {
+    await _moviesDao.deleteMovieByType(type);
+  }
+
   Future<List<Movie>> getAllMovie() async {
     return await _moviesDao.getAllMovie();
   }

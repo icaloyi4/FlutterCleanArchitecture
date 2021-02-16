@@ -12,6 +12,10 @@ class MoviesDao extends DatabaseAccessor<DatabaseModule> with _$MoviesDaoMixin {
       into(movies).insert(movie, mode: InsertMode.insertOrReplace);
   Future updateMovie(Movie movie) => update(movies).replace(movie);
   Future deleteMovie(Movie movie) => delete(movies).delete(movie);
+  Future deleteMovieByType(String type) {
+    return (delete(movies)..where((tbl) => tbl.typeMovie.equals(type))).go();
+  }
+
   Future deleteAllMovie() => delete(movies).go();
   Future<List<Movie>> getAllMovie() => select(movies).get();
 }
