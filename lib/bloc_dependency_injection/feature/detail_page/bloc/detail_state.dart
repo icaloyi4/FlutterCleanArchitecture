@@ -17,3 +17,27 @@ class FailedGetDataReview extends DetailState {
 
   FailedGetDataReview(this.message, this.review);
 }
+
+class SuccessUpdateFavourite extends DetailState {
+  final Movie movie;
+
+  SuccessUpdateFavourite(this.movie);
+}
+
+class FailedUpdateFavourite extends DetailState {
+  final String message;
+
+  FailedUpdateFavourite(this.message);
+}
+
+class SuccessGetFavourite extends DetailState {
+  final Movie movie;
+
+  SuccessGetFavourite(this.movie);
+}
+
+class FailedGetFavourite extends DetailState {
+  final String message;
+
+  FailedGetFavourite(this.message);
+}

@@ -1,6 +1,6 @@
 import 'package:moor_flutter/moor_flutter.dart';
 import 'package:movieapp/bloc_dependency_injection/core/database/movies_dao.dart';
-import 'package:movieapp/bloc_dependency_injection/feature/home_page/domain/models/db/movies_entity.dart';
+import 'package:movieapp/bloc_dependency_injection/core/database/entities/movies_entity.dart';
 
 part 'database_module.g.dart';
 

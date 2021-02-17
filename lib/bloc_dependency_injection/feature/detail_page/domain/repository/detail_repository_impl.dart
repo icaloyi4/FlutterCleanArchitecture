@@ -64,4 +64,52 @@ class DetailRepositoryImpl implements DetailRepository {
       onError("Error : $code ==> $errorBody", review);
     });
   }
+
+  @override
+  Future<void> setFavouriteMovie(
+      {@required bool favourite,
+      @required int movie_id,
+      @required String type,
+      Function(Movie movie) onSuccess,
+      Function(String message) onError}) async {
+    List<Movie> movie = await _localSource.getMovieByID(movie_id, type);
+
+    try {
+      if (movie.isNotEmpty) {
+        Movie movieLast = movie.last;
+        var movieUpdate = Movie(
+            favourite: favourite,
+            backdropPath: movieLast.backdropPath,
+            movieId: movieLast.movieId,
+            overview: movieLast.overview,
+            posterPath: movieLast.posterPath,
+            releaseDate: movieLast.releaseDate,
+            title: movieLast.title,
+            typeMovie: movieLast.typeMovie,
+            voteAverage: movieLast.voteAverage,
+            voteCount: movieLast.voteCount,
+            Id: movieLast.Id);
+        await _localSource.updateFavourite(movieUpdate);
+        onSuccess(movieUpdate);
+      } else {
+        onError('Gagal Update');
+      }
+    } on Exception catch (e) {
+      print(e);
+      onError('Gagal Update');
+    }
+  }
+
+  @override
+  Future<void> getMovieDB(
+      {@required int movie_id,
+      @required String type,
+      Function(List<Movie> movieList) onSuccess,
+      Function(String message, List<Movie> movieList) onError}) async {
+    var movies = await _localSource.getMovieByID(movie_id, type);
+    if (movies != null)
+      onSuccess(movies);
+    else
+      onError('Error', []);
+  }
 }

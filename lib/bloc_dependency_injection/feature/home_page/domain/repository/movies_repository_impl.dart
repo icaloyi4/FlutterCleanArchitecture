@@ -48,9 +48,10 @@ class MovieRepositoryImpl implements MovieRepository {
             backdropPath: element.backdropPath,
             overview: element.overview,
             releaseDate: element.releaseDate,
-            id: null,
             typeMovie: type,
-            voteAverage: element.voteAverage.toString());
+            voteAverage: element.voteAverage.toString(),
+            favourite: false,
+            Id: null);
         _localSource.insertMovie(movie);
         return movie;
       }).toList();
@@ -95,9 +96,10 @@ class MovieRepositoryImpl implements MovieRepository {
             backdropPath: element.backdropPath,
             overview: element.overview,
             releaseDate: element.releaseDate,
-            id: null,
             typeMovie: type,
-            voteAverage: element.voteAverage.toString());
+            voteAverage: element.voteAverage.toString(),
+            favourite: false,
+            Id: null);
         _localSource.insertMovie(movie);
         return movie;
       }).toList();

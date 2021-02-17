@@ -24,9 +24,25 @@ class _DetailScreen extends BaseState<DetailBloc, DetailState, DetailScreen> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    bloc.pushEvent(
+        GetMovieFaovourite(widget.movie.movieId, widget.movie.typeMovie));
+  }
+
+  @override
   Widget mapStateHandler(DetailState state) {
-    // TODO: implement mapStateHandler
-    throw UnimplementedError();
+    if (state is SuccessGetFavourite) {
+      return footer(state.movie);
+    } else if (state is FailedGetDataReview) {
+      return footer(widget.movie);
+    } else if (state is SuccessUpdateFavourite) {
+      return footer(state.movie);
+    } else if (state is FailedUpdateFavourite) {
+      return footer(widget.movie);
+    } else {
+      return footer(widget.movie);
+    }
   }
 
   @override
@@ -83,7 +99,13 @@ class _DetailScreen extends BaseState<DetailBloc, DetailState, DetailScreen> {
                 ),
               ],
             ),
-            child: footer(),
+            child: Container(
+              child: StreamBuilder<DetailState>(
+                  stream: bloc.stateStream,
+                  initialData: LoadingState(),
+                  builder: (blocCtx, snapshot) =>
+                      mapStateHandler(snapshot.data)),
+            ),
           ),
         ],
       ),
@@ -101,7 +123,7 @@ class _DetailScreen extends BaseState<DetailBloc, DetailState, DetailScreen> {
     );
   }
 
-  Widget footer() {
+  Widget footer(Movie movie) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Row(
@@ -109,11 +131,19 @@ class _DetailScreen extends BaseState<DetailBloc, DetailState, DetailScreen> {
           Expanded(
             child: Align(
               alignment: Alignment.centerRight,
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Icon(
-                  Icons.favorite_outline,
-                  color: Colors.white,
+              child: GestureDetector(
+                onTap: () {
+                  bloc.pushEvent(UpdateFavouriteMovie(
+                      (movie.favourite ? false : true),
+                      movie.movieId,
+                      movie.typeMovie));
+                },
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Icon(
+                    movie.favourite ? Icons.favorite : Icons.favorite_outline,
+                    color: Colors.white,
+                  ),
                 ),
               ),
             ),
