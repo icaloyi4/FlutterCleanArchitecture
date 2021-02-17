@@ -19,7 +19,7 @@ class FailedGetDataReview extends DetailState {
 }
 
 class SuccessUpdateFavourite extends DetailState {
-  final Movie movie;
+  final MoviesFavouriteData movie;
 
   SuccessUpdateFavourite(this.movie);
 }
@@ -31,7 +31,7 @@ class FailedUpdateFavourite extends DetailState {
 }
 
 class SuccessGetFavourite extends DetailState {
-  final Movie movie;
+  final MoviesFavouriteData movie;
 
   SuccessGetFavourite(this.movie);
 }

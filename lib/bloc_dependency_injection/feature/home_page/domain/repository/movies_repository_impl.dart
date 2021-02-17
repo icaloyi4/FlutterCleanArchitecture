@@ -50,7 +50,6 @@ class MovieRepositoryImpl implements MovieRepository {
             releaseDate: element.releaseDate,
             typeMovie: type,
             voteAverage: element.voteAverage.toString(),
-            favourite: false,
             Id: null);
         _localSource.insertMovie(movie);
         return movie;
@@ -98,7 +97,6 @@ class MovieRepositoryImpl implements MovieRepository {
             releaseDate: element.releaseDate,
             typeMovie: type,
             voteAverage: element.voteAverage.toString(),
-            favourite: false,
             Id: null);
         _localSource.insertMovie(movie);
         return movie;

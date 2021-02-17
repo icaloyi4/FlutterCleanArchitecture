@@ -70,29 +70,43 @@ class DetailRepositoryImpl implements DetailRepository {
       {@required bool favourite,
       @required int movie_id,
       @required String type,
-      Function(Movie movie) onSuccess,
+      @required Movie movie,
+      Function(MoviesFavouriteData movie) onSuccess,
       Function(String message) onError}) async {
-    List<Movie> movie = await _localSource.getMovieByID(movie_id, type);
+    List<MoviesFavouriteData> movieLast =
+        await _localSource.getFavouritesMovieByID(movie_id);
 
     try {
-      if (movie.isNotEmpty) {
-        Movie movieLast = movie.last;
-        var movieUpdate = Movie(
-            favourite: favourite,
-            backdropPath: movieLast.backdropPath,
-            movieId: movieLast.movieId,
-            overview: movieLast.overview,
-            posterPath: movieLast.posterPath,
-            releaseDate: movieLast.releaseDate,
-            title: movieLast.title,
-            typeMovie: movieLast.typeMovie,
-            voteAverage: movieLast.voteAverage,
-            voteCount: movieLast.voteCount,
-            Id: movieLast.Id);
+      if (movieLast.isNotEmpty) {
+        var movieUpdate = MoviesFavouriteData(
+            backdropPath: movie.backdropPath,
+            movieId: movie.movieId,
+            overview: movie.overview,
+            posterPath: movie.posterPath,
+            releaseDate: movie.releaseDate,
+            title: movie.title,
+            typeMovie: movie.typeMovie,
+            voteAverage: movie.voteAverage,
+            voteCount: movie.voteCount,
+            Id: movieLast.last.Id,
+            favourite: favourite);
         await _localSource.updateFavourite(movieUpdate);
         onSuccess(movieUpdate);
       } else {
-        onError('Gagal Update');
+        var movieUpdate = MoviesFavouriteData(
+            backdropPath: movie.backdropPath,
+            movieId: movie.movieId,
+            overview: movie.overview,
+            posterPath: movie.posterPath,
+            releaseDate: movie.releaseDate,
+            title: movie.title,
+            typeMovie: movie.typeMovie,
+            voteAverage: movie.voteAverage,
+            voteCount: movie.voteCount,
+            Id: null,
+            favourite: favourite);
+        await _localSource.insertFavourite(movieUpdate);
+        onSuccess(movieUpdate);
       }
     } on Exception catch (e) {
       print(e);
@@ -104,10 +118,11 @@ class DetailRepositoryImpl implements DetailRepository {
   Future<void> getMovieDB(
       {@required int movie_id,
       @required String type,
-      Function(List<Movie> movieList) onSuccess,
-      Function(String message, List<Movie> movieList) onError}) async {
-    var movies = await _localSource.getMovieByID(movie_id, type);
-    if (movies != null)
+      Function(List<MoviesFavouriteData> movieList) onSuccess,
+      Function(String message, List<MoviesFavouriteData> movieList)
+          onError}) async {
+    var movies = await _localSource.getFavouritesMovieByID(movie_id);
+    if (movies.isNotEmpty)
       onSuccess(movies);
     else
       onError('Error', []);

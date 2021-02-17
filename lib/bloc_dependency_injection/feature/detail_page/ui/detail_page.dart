@@ -4,7 +4,9 @@ import 'package:flutter/services.dart';
 import 'package:kiwi/kiwi.dart';
 import 'package:movieapp/bloc_dependency_injection/core/base/base_stateful.dart';
 import 'package:movieapp/bloc_dependency_injection/core/database/database_module.dart';
+import 'package:movieapp/bloc_dependency_injection/core/database/entities/movies_favourite_entity.dart';
 import 'package:movieapp/bloc_dependency_injection/core/remote/dio_model.dart';
+import 'package:movieapp/bloc_dependency_injection/core/widget/shimmer_loading.dart';
 import 'package:movieapp/bloc_dependency_injection/feature/detail_page/bloc/detail_bloc.dart';
 import 'package:movieapp/bloc_dependency_injection/feature/detail_page/ui/widget/list_review.dart';
 
@@ -34,14 +36,14 @@ class _DetailScreen extends BaseState<DetailBloc, DetailState, DetailScreen> {
   Widget mapStateHandler(DetailState state) {
     if (state is SuccessGetFavourite) {
       return footer(state.movie);
-    } else if (state is FailedGetDataReview) {
-      return footer(widget.movie);
+    } else if (state is FailedGetFavourite) {
+      return footer(null);
     } else if (state is SuccessUpdateFavourite) {
       return footer(state.movie);
     } else if (state is FailedUpdateFavourite) {
-      return footer(widget.movie);
+      return footer(null);
     } else {
-      return footer(widget.movie);
+      return ShimmerLoading(type: Axis.horizontal);
     }
   }
 
@@ -123,7 +125,7 @@ class _DetailScreen extends BaseState<DetailBloc, DetailState, DetailScreen> {
     );
   }
 
-  Widget footer(Movie movie) {
+  Widget footer(MoviesFavouriteData moviesFavourite) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Row(
@@ -134,14 +136,21 @@ class _DetailScreen extends BaseState<DetailBloc, DetailState, DetailScreen> {
               child: GestureDetector(
                 onTap: () {
                   bloc.pushEvent(UpdateFavouriteMovie(
-                      (movie.favourite ? false : true),
-                      movie.movieId,
-                      movie.typeMovie));
+                      (moviesFavourite == null
+                          ? true
+                          : (moviesFavourite.favourite ? false : true)),
+                      widget.movie.movieId,
+                      widget.movie.typeMovie,
+                      widget.movie));
                 },
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Icon(
-                    movie.favourite ? Icons.favorite : Icons.favorite_outline,
+                    moviesFavourite == null
+                        ? Icons.favorite_outline
+                        : moviesFavourite.favourite
+                            ? Icons.favorite
+                            : Icons.favorite_outline,
                     color: Colors.white,
                   ),
                 ),

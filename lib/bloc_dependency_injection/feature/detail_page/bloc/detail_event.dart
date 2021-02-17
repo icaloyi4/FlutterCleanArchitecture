@@ -13,8 +13,9 @@ class UpdateFavouriteMovie extends DetailEvent {
   final bool favourite;
   final int movie_id;
   final String type;
+  final Movie movie;
 
-  UpdateFavouriteMovie(this.favourite, this.movie_id, this.type);
+  UpdateFavouriteMovie(this.favourite, this.movie_id, this.type, this.movie);
 }
 
 class GetMovieFaovourite extends DetailEvent {

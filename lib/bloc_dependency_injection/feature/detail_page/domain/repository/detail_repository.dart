@@ -12,13 +12,14 @@ abstract class DetailRepository {
   Future<void> getMovieDB(
       {@required int movie_id,
       @required String type,
-      Function(List<Movie> movieList) onSuccess,
-      Function(String message, List<Movie> movieList) onError});
+      Function(List<MoviesFavouriteData> movieList) onSuccess,
+      Function(String message, List<MoviesFavouriteData> movieList) onError});
 
   Future<void> setFavouriteMovie(
       {@required bool favourite,
       @required int movie_id,
       @required String type,
-      Function(Movie movie) onSuccess,
+      @required Movie movie,
+      Function(MoviesFavouriteData movie) onSuccess,
       Function(String message) onError});
 }

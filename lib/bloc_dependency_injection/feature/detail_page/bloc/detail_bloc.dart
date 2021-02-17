@@ -3,6 +3,7 @@ import 'package:movieapp/bloc_dependency_injection/core/base/base_bloc.dart';
 import 'package:movieapp/bloc_dependency_injection/core/base/bloc_event.dart';
 import 'package:movieapp/bloc_dependency_injection/core/base/bloc_state.dart';
 import 'package:movieapp/bloc_dependency_injection/core/database/database_module.dart';
+import 'package:movieapp/bloc_dependency_injection/core/database/entities/movies_favourite_entity.dart';
 import 'package:movieapp/bloc_dependency_injection/feature/detail_page/domain/models/review_model.dart';
 import 'package:movieapp/bloc_dependency_injection/feature/detail_page/domain/repository/detail_repository.dart';
 
@@ -69,7 +70,8 @@ class DetailBloc extends BaseBloc<DetailEvent, DetailState> {
         },
         favourite: event.favourite,
         movie_id: event.movie_id,
-        type: event.type);
+        type: event.type,
+        movie: event.movie);
     isOnProcess = false;
   }
 }

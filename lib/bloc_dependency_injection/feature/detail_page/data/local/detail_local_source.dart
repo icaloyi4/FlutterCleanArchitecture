@@ -6,11 +6,19 @@ class DetailLocalSource {
 
   DetailLocalSource(this._moviesDao);
 
-  Future updateFavourite(Movie movie) async {
-    await _moviesDao.updateMovie(movie);
+  Future updateFavourite(MoviesFavouriteData movie) async {
+    await _moviesDao.updateMovieFavourite(movie);
   }
 
-  Future<List<Movie>> getMovieByID(int id_movie, String type) async {
-    return await _moviesDao.getAllMovieByID(id_movie, type);
+  Future insertFavourite(MoviesFavouriteData movie) async {
+    await _moviesDao.insertMovieFavourite(movie);
+  }
+
+  Future<List<MoviesFavouriteData>> getFavouritesMovieByID(int movie_id) async {
+    return await _moviesDao.getFavouriteMovie(movie_id);
+  }
+
+  Future<List<Movie>> getMovieByID(int movie_id, String type) async {
+    return await _moviesDao.getAllMovieByID(movie_id, type);
   }
 }

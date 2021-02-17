@@ -8,4 +8,5 @@ part of 'movies_dao.dart';
 
 mixin _$MoviesDaoMixin on DatabaseAccessor<DatabaseModule> {
   $MoviesTable get movies => attachedDatabase.movies;
+  $MoviesFavouriteTable get moviesFavourite => attachedDatabase.moviesFavourite;
 }

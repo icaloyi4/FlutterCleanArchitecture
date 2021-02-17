@@ -1,6 +1,6 @@
 import 'package:moor_flutter/moor_flutter.dart';
 
-class Movies extends Table {
+class MoviesFavourite extends Table {
   IntColumn get Id => integer().autoIncrement()();
   IntColumn get movieId => integer()();
   IntColumn get voteCount => integer()();
@@ -11,4 +11,5 @@ class Movies extends Table {
   TextColumn get overview => text()();
   TextColumn get releaseDate => text()();
   TextColumn get typeMovie => text()();
+  BoolColumn get favourite => boolean()();
 }
