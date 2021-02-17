@@ -83,7 +83,7 @@ class AuthorDetails {
   String name;
   String username;
   String avatarPath;
-  int rating;
+  double rating;
 
   AuthorDetails({this.name, this.username, this.avatarPath, this.rating});
 

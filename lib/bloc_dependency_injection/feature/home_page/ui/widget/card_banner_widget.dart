@@ -6,6 +6,8 @@ import 'package:movieapp/bloc_dependency_injection/core/base/base_stateful.dart'
 import 'package:movieapp/bloc_dependency_injection/core/database/database_module.dart';
 import 'package:movieapp/bloc_dependency_injection/core/remote/dio_model.dart';
 import 'package:movieapp/bloc_dependency_injection/core/routing/routing.dart';
+import 'package:movieapp/bloc_dependency_injection/core/widget/error_text.dart';
+import 'package:movieapp/bloc_dependency_injection/core/widget/shimmer_loading.dart';
 import 'package:movieapp/bloc_dependency_injection/feature/home_page/bloc/home_bloc.dart';
 import 'package:shimmer/shimmer.dart';
 
@@ -51,12 +53,14 @@ class _CardBannerWidget
       return list(state.movieList);
     } else if (state is FailedGetDiscoverState) {
       if (state.movieList.isEmpty) {
-        return _errorText(state.message);
+        return ErrorText(
+          message: state.message,
+        );
       } else {
         return list(state.movieList);
       }
     } else {
-      return _loadingView(context);
+      return ShimmerLoading(type: Axis.vertical);
     }
   }
 
@@ -171,47 +175,47 @@ class _CardBannerWidget
     );
   }
 
-  Widget _errorText(String message) {
-    return Center(
-      child: Text(message),
-    );
-  }
+  // Widget _errorText(String message) {
+  //   return Center(
+  //     child: Text(message),
+  //   );
+  // }
 
-  Widget _loadingView(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
-    int item = (size.height / 156).round();
-    return Container(
-      width: size.width,
-      height: size.height,
-      padding: EdgeInsets.only(top: 12, left: 12, right: 12),
-      child: Shimmer.fromColors(
-        baseColor: Colors.grey[300],
-        highlightColor: Colors.grey[100],
-        enabled: true,
-        child: ListView.builder(
-            scrollDirection: Axis.vertical,
-            itemCount: item,
-            itemBuilder: (c, i) {
-              return Container(
-                padding: EdgeInsets.symmetric(vertical: 8),
-                child: Column(
-                  children: [
-                    Container(
-                      color: Colors.white,
-                      width: size.width,
-                      height: 100,
-                    ),
-                    SizedBox(height: 12),
-                    Container(
-                      color: Colors.white,
-                      width: size.width,
-                      height: 20,
-                    ),
-                  ],
-                ),
-              );
-            }),
-      ),
-    );
-  }
+  // Widget _loadingView(BuildContext context) {
+  //   Size size = MediaQuery.of(context).size;
+  //   int item = (size.height / 156).round();
+  //   return Container(
+  //     width: size.width,
+  //     height: size.height,
+  //     padding: EdgeInsets.only(top: 12, left: 12, right: 12),
+  //     child: Shimmer.fromColors(
+  //       baseColor: Colors.grey[300],
+  //       highlightColor: Colors.grey[100],
+  //       enabled: true,
+  //       child: ListView.builder(
+  //           scrollDirection: Axis.vertical,
+  //           itemCount: item,
+  //           itemBuilder: (c, i) {
+  //             return Container(
+  //               padding: EdgeInsets.symmetric(vertical: 8),
+  //               child: Column(
+  //                 children: [
+  //                   Container(
+  //                     color: Colors.white,
+  //                     width: size.width,
+  //                     height: 100,
+  //                   ),
+  //                   SizedBox(height: 12),
+  //                   Container(
+  //                     color: Colors.white,
+  //                     width: size.width,
+  //                     height: 20,
+  //                   ),
+  //                 ],
+  //               ),
+  //             );
+  //           }),
+  //     ),
+  //   );
+  // }
 }

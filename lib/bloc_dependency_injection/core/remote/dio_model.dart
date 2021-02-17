@@ -6,5 +6,6 @@ class ApiUrl {
   static const DISCOVER_MOVIES = "${baseUrl}movie/now_playing";
   static const POPULAR_MOVIES = "${baseUrl}movie/popular";
   static const UPCOMING_MOVIES = "${baseUrl}movie/upcoming";
+  static const REVIEW_MOVIE = "${baseUrl}movie";
   static const DETAIL_MOVIES = "/movie/{movie_id}";
 }
