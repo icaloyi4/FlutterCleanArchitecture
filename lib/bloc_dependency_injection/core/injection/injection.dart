@@ -8,6 +8,11 @@ import 'package:movieapp/bloc_dependency_injection/feature/detail_page/data/loca
 import 'package:movieapp/bloc_dependency_injection/feature/detail_page/data/remote/detail_remote_source.dart';
 import 'package:movieapp/bloc_dependency_injection/feature/detail_page/domain/repository/detail_repository.dart';
 import 'package:movieapp/bloc_dependency_injection/feature/detail_page/domain/repository/detail_repository_impl.dart';
+import 'package:movieapp/bloc_dependency_injection/feature/favourite_page/bloc/favourite_bloc.dart';
+import 'package:movieapp/bloc_dependency_injection/feature/favourite_page/data/local/favourite_local_source.dart';
+import 'package:movieapp/bloc_dependency_injection/feature/favourite_page/data/remote/favourite_remote_source.dart';
+import 'package:movieapp/bloc_dependency_injection/feature/favourite_page/domain/repository/favourite_repository.dart';
+import 'package:movieapp/bloc_dependency_injection/feature/favourite_page/domain/repository/favourite_repository_impl.dart';
 import 'package:movieapp/bloc_dependency_injection/feature/home_page/bloc/home_bloc.dart';
 import 'package:movieapp/bloc_dependency_injection/feature/home_page/data/local/movie_local_source.dart';
 import 'package:movieapp/bloc_dependency_injection/feature/home_page/data/remote/movie_remote_source.dart';
@@ -32,6 +37,12 @@ abstract class Injection {
       from: DetailRepositoryImpl,
       resolvers: {DetailRemoteSource: null, DetailLocalSource: null})
   @Register.factory(DetailBloc, resolvers: {DetailRepository: null})
+  @Register.singleton(FavouriteRemoteSource, resolvers: {Dio: null})
+  @Register.singleton(FavouriteLocalSource, resolvers: {MoviesDao: null})
+  @Register.singleton(FavouriteRepository,
+      from: FavouriteRepositoryImpl,
+      resolvers: {FavouriteRemoteSource: null, FavouriteLocalSource: null})
+  @Register.factory(FavouriteBloc, resolvers: {FavouriteRepository: null})
   void configure();
 }
 

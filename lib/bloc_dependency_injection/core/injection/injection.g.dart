@@ -23,5 +23,11 @@ class _$Injection extends Injection {
     container.registerSingleton<DetailRepository>((c) =>
         DetailRepositoryImpl(c<DetailRemoteSource>(), c<DetailLocalSource>()));
     container.registerFactory((c) => DetailBloc(c<DetailRepository>()));
+    container.registerSingleton((c) => FavouriteRemoteSource(c<Dio>()));
+    container.registerSingleton((c) => FavouriteLocalSource(c<MoviesDao>()));
+    container.registerSingleton<FavouriteRepository>((c) =>
+        FavouriteRepositoryImpl(
+            c<FavouriteRemoteSource>(), c<FavouriteLocalSource>()));
+    container.registerFactory((c) => FavouriteBloc(c<FavouriteRepository>()));
   }
 }

@@ -4,6 +4,7 @@ import 'package:movieapp/bloc_dependency_injection/core/database/database_module
 import 'package:movieapp/bloc_dependency_injection/core/routing/routing.dart';
 import 'package:movieapp/bloc_dependency_injection/core/routing/undefined_view.dart';
 import 'package:movieapp/bloc_dependency_injection/feature/detail_page/ui/detail_page.dart';
+import 'package:movieapp/bloc_dependency_injection/feature/favourite_page/ui/favourite_page.dart';
 import 'package:movieapp/bloc_dependency_injection/feature/home_page/ui/home_page.dart';
 
 class RouterApp {
@@ -19,6 +20,10 @@ class RouterApp {
           builder: (_) => DetailScreen(
             movie: movie,
           ),
+        );
+      case Routing.FAVOURITE_MOVIE:
+        return MaterialPageRoute(
+          builder: (_) => FavouritePage(),
         );
       default:
         return MaterialPageRoute(

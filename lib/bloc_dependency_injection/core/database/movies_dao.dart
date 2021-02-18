@@ -42,4 +42,11 @@ class MoviesDao extends DatabaseAccessor<DatabaseModule> with _$MoviesDaoMixin {
           ..where((tbl) => tbl.movieId.equals(movie_id)))
         .get();
   }
+
+  Future<List<MoviesFavouriteData>> getAllFavouriteMovies(
+          int limit, int offset) =>
+      (select(moviesFavourite)
+            ..where((tbl) => tbl.favourite.equals(true))
+            ..limit(limit, offset: offset))
+          .get();
 }

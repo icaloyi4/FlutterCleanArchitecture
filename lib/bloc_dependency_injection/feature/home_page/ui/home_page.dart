@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:movieapp/bloc_dependency_injection/core/database/database_module.dart';
+import 'package:movieapp/bloc_dependency_injection/core/routing/routing.dart';
 import 'package:movieapp/bloc_dependency_injection/feature/home_page/ui/widget/card_banner_widget.dart';
 import 'package:movieapp/bloc_dependency_injection/feature/home_page/ui/widget/card_list_widget.dart';
 
@@ -32,7 +33,7 @@ class _HomeScreenState extends State<HomeScreen> {
             icon: Icon(Icons.favorite_rounded),
             tooltip: "Save Todo and Retrun to List",
             onPressed: () {
-              // save();
+              Navigator.pushNamed(context, Routing.FAVOURITE_MOVIE);
             },
           )
         ],
