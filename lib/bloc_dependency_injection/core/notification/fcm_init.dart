@@ -3,9 +3,13 @@ import 'dart:io';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 
+import 'local_notification.dart';
+
 class FCMInit {
   final firebaseMessaging = FirebaseMessaging();
-  String token = '';
+  static String token = '';
+  final localNotification = LocalNotification();
+
 
   static Future<dynamic> onBackgroundMessage(Map<String, dynamic> message) {
     debugPrint('onBackgroundMessage: $message');
@@ -26,21 +30,25 @@ class FCMInit {
     }
     return null;
   }
-  void init() {
+  Future<void> init() async {
     firebaseMessaging.configure(
       onMessage: (Map<String, dynamic> message) async {
         debugPrint('onMessage: $message');
-        getDataFcm(message);
-      },
-      onBackgroundMessage: onBackgroundMessage,
-      onResume: (Map<String, dynamic> message) async {
-        debugPrint('onResume: $message');
-        getDataFcm(message);
-      },
-      onLaunch: (Map<String, dynamic> message) async {
-        debugPrint('onLaunch: $message');
-        getDataFcm(message);
-      },
+        await localNotification.notificationHandler();
+          LocalNotification.showNotification(message);
+        },
+        onBackgroundMessage: onBackgroundMessage,
+        onLaunch: (Map<String, dynamic> message) async {
+          debugPrint('onLaunch: $message');
+          await localNotification.notificationHandler();
+          LocalNotification.showNotification(message);
+        },
+
+        onResume: (Map<String, dynamic> message) async {
+          debugPrint('onResume: $message');
+          await localNotification.notificationHandler();
+          LocalNotification.showNotification(message);
+        }
     );
     firebaseMessaging.requestNotificationPermissions(
       const IosNotificationSettings(sound: true, badge: true, alert: true, provisional: true),
@@ -48,12 +56,8 @@ class FCMInit {
     firebaseMessaging.onIosSettingsRegistered.listen((settings) {
       debugPrint('Settings registered: $settings');
     });
-    // firebaseMessaging.getToken().then((token) => setState(() {
-    //   this.token = token;
-    // }));
-    firebaseMessaging.getToken().then((token) {
-      this.token = token;
-    });
+    token = await firebaseMessaging.getToken();
+    debugPrint('device token:$token');
   }
 
   void getDataFcm(Map<String, dynamic> message) {

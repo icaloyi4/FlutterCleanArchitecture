@@ -1,9 +1,10 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:movieapp/bloc_dependency_injection/core/database/database_module.dart';
 import 'package:movieapp/bloc_dependency_injection/core/notification/local_notification.dart';
-import 'package:movieapp/bloc_dependency_injection/core/routing/routing.dart';
+import 'package:movieapp/bloc_dependency_injection/core/routing/routing.dart' as r;
 import 'package:movieapp/bloc_dependency_injection/feature/home_page/ui/widget/card_banner_widget.dart';
 import 'package:movieapp/bloc_dependency_injection/feature/home_page/ui/widget/card_list_widget.dart';
 
@@ -16,32 +17,10 @@ class _HomeScreenState extends State<HomeScreen> {
   BuildContext _context;
   List<Movie> nowPlaying = [];
   List<Movie> popular = [];
-  final firebaseMessaging = FirebaseMessaging();
-
-  static Future<dynamic> onBackgroundMessage(Map<String, dynamic> message) {
-    debugPrint('onBackgroundMessage: $message');
-    // 0
-    return LocalNotification.showNotification(message);
-  }
 
   @override
   void initState() {
     super.initState();
-     firebaseMessaging.configure(
-        onMessage: (Map<String, dynamic> message) async {
-          LocalNotification.showNotification(message);
-        },
-        onBackgroundMessage: onBackgroundMessage,
-        onLaunch: (Map<String, dynamic> message) async {
-          LocalNotification.showNotification(message);
-        },
-
-        onResume: (Map<String, dynamic> message) async {
-          LocalNotification.showNotification(message);
-        }
-    );
-    // bloc.pushEvent(GetDiscoverMovieEvent(page: 1));
-    // bloc.pushEvent(GetPopularMovieEvent(page: 1));
   }
 
   @override
@@ -55,7 +34,8 @@ class _HomeScreenState extends State<HomeScreen> {
             icon: Icon(Icons.favorite_rounded),
             tooltip: "Save Todo and Retrun to List",
             onPressed: () {
-              Navigator.pushNamed(context, Routing.FAVOURITE_MOVIE);
+              // Navigator.pushNamed(context, Routing.FAVOURITE_MOVIE);
+              Get.toNamed(r.Routing.FAVOURITE_MOVIE);
             },
           )
         ],

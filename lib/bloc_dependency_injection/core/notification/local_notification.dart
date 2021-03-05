@@ -2,7 +2,8 @@ import 'dart:convert';
 
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter/material.dart';
-import 'package:movieapp/bloc_dependency_injection/core/routing/routing.dart';
+import 'package:get/get.dart';
+import 'package:movieapp/bloc_dependency_injection/core/routing/routing.dart' as r;
 
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
@@ -27,13 +28,14 @@ class LocalNotification {
     }
   }
 
-  Future<void> notificationHandler(BuildContext context) async {
+  Future<void> notificationHandler() async {
     const AndroidInitializationSettings initializationSettingsAndroid = AndroidInitializationSettings('@mipmap/ic_launcher');
     final InitializationSettings initializationSettings = InitializationSettings(android: initializationSettingsAndroid);
     flutterLocalNotificationsPlugin.initialize(initializationSettings,
         onSelectNotification: (String payload) async {
           if (payload != null) {
-            Navigator.pushNamed(context, Routing.FAVOURITE_MOVIE);
+            // Navigator.pushNamed(context, Routing.FAVOURITE_MOVIE);
+            Get.toNamed(r.Routing.FAVOURITE_MOVIE);
           }
         });
   }

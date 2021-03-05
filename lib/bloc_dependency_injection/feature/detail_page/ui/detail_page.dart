@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 import 'package:kiwi/kiwi.dart';
 import 'package:movieapp/bloc_dependency_injection/core/base/base_stateful.dart';
 import 'package:movieapp/bloc_dependency_injection/core/database/database_module.dart';
@@ -11,15 +12,17 @@ import 'package:movieapp/bloc_dependency_injection/feature/detail_page/bloc/deta
 import 'package:movieapp/bloc_dependency_injection/feature/detail_page/ui/widget/list_review.dart';
 
 class DetailScreen extends StatefulWidget {
-  final Movie movie;
+  // final Movie movie;
 
-  DetailScreen({@required this.movie});
+  DetailScreen();
 
   @override
   _DetailScreen createState() => _DetailScreen();
 }
 
 class _DetailScreen extends BaseState<DetailBloc, DetailState, DetailScreen> {
+
+  final Movie movie = Get.arguments;
   @override
   DetailBloc initBloc() {
     return KiwiContainer().resolve<DetailBloc>();
@@ -29,7 +32,7 @@ class _DetailScreen extends BaseState<DetailBloc, DetailState, DetailScreen> {
   void initState() {
     super.initState();
     bloc.pushEvent(
-        GetMovieFaovourite(widget.movie.movieId, widget.movie.typeMovie));
+        GetMovieFaovourite(movie.movieId, movie.typeMovie));
   }
 
   @override
@@ -119,7 +122,7 @@ class _DetailScreen extends BaseState<DetailBloc, DetailState, DetailScreen> {
       borderRadius: BorderRadius.only(
           bottomLeft: Radius.circular(20), bottomRight: Radius.circular(20)),
       child: CachedNetworkImage(
-        imageUrl: '${ApiUrl.IMAGE_URL}${widget.movie.backdropPath}',
+        imageUrl: '${ApiUrl.IMAGE_URL}${movie.backdropPath}',
         fit: BoxFit.cover,
       ),
     );
@@ -139,9 +142,9 @@ class _DetailScreen extends BaseState<DetailBloc, DetailState, DetailScreen> {
                       (moviesFavourite == null
                           ? true
                           : (moviesFavourite.favourite ? false : true)),
-                      widget.movie.movieId,
-                      widget.movie.typeMovie,
-                      widget.movie));
+                      movie.movieId,
+                      movie.typeMovie,
+                      movie));
                 },
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
@@ -187,7 +190,7 @@ class _DetailScreen extends BaseState<DetailBloc, DetailState, DetailScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         Text(
-                          widget.movie.title,
+                          movie.title,
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(
                             color: Colors.blue,
@@ -199,7 +202,7 @@ class _DetailScreen extends BaseState<DetailBloc, DetailState, DetailScreen> {
                           height: 4.0,
                         ),
                         Text(
-                          'Date Release: ${widget.movie.releaseDate}',
+                          'Date Release: ${movie.releaseDate}',
                         ),
                       ],
                     ),
@@ -219,11 +222,11 @@ class _DetailScreen extends BaseState<DetailBloc, DetailState, DetailScreen> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Text(
-                        widget.movie.voteAverage.toString(),
+                        movie.voteAverage.toString(),
                         style: TextStyle(color: Colors.amber, fontSize: 20),
                       ),
                       Text(
-                        '${widget.movie.voteCount} People Vote',
+                        '${movie.voteCount} People Vote',
                         style: TextStyle(fontSize: 12),
                       ),
                     ],
@@ -245,7 +248,7 @@ class _DetailScreen extends BaseState<DetailBloc, DetailState, DetailScreen> {
             ),
           ),
           Text(
-            widget.movie.overview,
+            movie.overview,
           ),
           SizedBox(
             height: 10,
@@ -259,7 +262,7 @@ class _DetailScreen extends BaseState<DetailBloc, DetailState, DetailScreen> {
               fontWeight: FontWeight.bold,
             ),
           ),
-          ListReview(movie: widget.movie)
+          ListReview(movie: movie)
         ],
       ),
     );

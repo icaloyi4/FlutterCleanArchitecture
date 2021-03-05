@@ -1,11 +1,12 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:kiwi/kiwi.dart';
 import 'package:movieapp/bloc_dependency_injection/core/base/base_stateful.dart';
 import 'package:movieapp/bloc_dependency_injection/core/database/database_module.dart';
 import 'package:movieapp/bloc_dependency_injection/core/remote/dio_model.dart';
-import 'package:movieapp/bloc_dependency_injection/core/routing/routing.dart';
+import 'package:movieapp/bloc_dependency_injection/core/routing/routing.dart' as r;
 import 'package:movieapp/bloc_dependency_injection/core/widget/error_text.dart';
 import 'package:movieapp/bloc_dependency_injection/core/widget/shimmer_loading.dart';
 import 'package:movieapp/bloc_dependency_injection/feature/favourite_page/bloc/favourite_bloc.dart';
@@ -98,12 +99,17 @@ class _ListFavouriteMovie
                     overview: movie.overview,
                     releaseDate: movie.releaseDate,
                     typeMovie: movie.typeMovie);
-                Navigator.pushNamed(context, Routing.DETAIL_MOVIE,
-                        arguments: mov)
-                    .then((value) {
-                  offset = 0;
+                    Get.toNamed(r.Routing.DETAIL_MOVIE,
+                        arguments: mov).then((value) {
+                          offset = 0;
                   bloc.pushEvent(GetFavouriteMovie());
-                });
+                        });
+                // Navigator.pushNamed(context, Routing.DETAIL_MOVIE,
+                //         arguments: mov)
+                //     .then((value) {
+                //   offset = 0;
+                //   bloc.pushEvent(GetFavouriteMovie());
+                // });
               },
               child: Card(
                 shape: RoundedRectangleBorder(

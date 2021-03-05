@@ -19,13 +19,13 @@ class RouterApp {
         return MaterialPageRoute(
           builder: (_) => HomeScreen(),
         );
-      case Routing.DETAIL_MOVIE:
-        Movie movie = settings.arguments as Movie;
-        return MaterialPageRoute(
-          builder: (_) => DetailScreen(
-            movie: movie,
-          ),
-        );
+      // case Routing.DETAIL_MOVIE:
+      //   Movie movie = settings.arguments as Movie;
+      //   return MaterialPageRoute(
+      //     builder: (_) => DetailScreen(
+      //       movie: movie,
+      //     ),
+      //   );
       case Routing.FAVOURITE_MOVIE:
         return MaterialPageRoute(
           builder: (_) => FavouritePage(),

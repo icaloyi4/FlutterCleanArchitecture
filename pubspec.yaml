@@ -37,6 +37,7 @@ dependencies:
   flutter_bloc: ^6.1.2
   fluttertoast: ^7.1.6
   flutter_local_notifications: ^4.0.1+1
+  get: ^3.26.0
   # Service locator
   get_it: ^2.0.1
   # Remote API

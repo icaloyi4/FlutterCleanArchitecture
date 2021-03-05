@@ -1,11 +1,12 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:kiwi/kiwi.dart';
 import 'package:movieapp/bloc_dependency_injection/core/base/base_stateful.dart';
 import 'package:movieapp/bloc_dependency_injection/core/database/database_module.dart';
 import 'package:movieapp/bloc_dependency_injection/core/remote/dio_model.dart';
-import 'package:movieapp/bloc_dependency_injection/core/routing/routing.dart';
+import 'package:movieapp/bloc_dependency_injection/core/routing/routing.dart' as r;
 import 'package:movieapp/bloc_dependency_injection/core/widget/error_text.dart';
 import 'package:movieapp/bloc_dependency_injection/core/widget/shimmer_loading.dart';
 import 'package:movieapp/bloc_dependency_injection/feature/home_page/bloc/home_bloc.dart';
@@ -91,7 +92,9 @@ class _CardBannerWidget
             Movie movie = _movie[pos];
             return GestureDetector(
               onTap: () {
-                Navigator.pushNamed(context, Routing.DETAIL_MOVIE,
+                // Navigator.pushNamed(context, Routing.DETAIL_MOVIE,
+                //     arguments: movie);
+                Get.toNamed(r.Routing.DETAIL_MOVIE,
                     arguments: movie);
               },
               child: Card(
