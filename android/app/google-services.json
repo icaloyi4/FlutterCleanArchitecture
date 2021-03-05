@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "916508403095",
+    "project_id": "fmc-movie-apps",
+    "storage_bucket": "fmc-movie-apps.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:916508403095:android:f6ddbf3dd2ed2eff6f90d2",
+        "android_client_info": {
+          "package_name": "id.movieapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "916508403095-2bab043sur0hissk4nhrg42vg87u9hov.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCwj9ZTVII6_FwCKujExnUyxp89h51WBME"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "916508403095-2bab043sur0hissk4nhrg42vg87u9hov.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

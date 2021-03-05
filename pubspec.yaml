@@ -32,9 +32,11 @@ dependencies:
   dio: ^3.0.10
   # Value equality
   equatable: ^0.4.0
+  firebase_messaging: ^7.0.3
   # Bloc for state management
   flutter_bloc: ^6.1.2
   fluttertoast: ^7.1.6
+  flutter_local_notifications: ^4.0.1+1
   # Service locator
   get_it: ^2.0.1
   # Remote API
@@ -43,6 +45,7 @@ dependencies:
   moor_flutter: ^3.1.0
   # Dependency Injector
   kiwi: ^2.1.1
+  overlay_support: ^1.0.5
   # Local cache
   shared_preferences: ^0.5.3+4
   shimmer: ^1.1.1

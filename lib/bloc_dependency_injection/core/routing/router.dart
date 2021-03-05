@@ -6,11 +6,16 @@ import 'package:movieapp/bloc_dependency_injection/core/routing/undefined_view.d
 import 'package:movieapp/bloc_dependency_injection/feature/detail_page/ui/detail_page.dart';
 import 'package:movieapp/bloc_dependency_injection/feature/favourite_page/ui/favourite_page.dart';
 import 'package:movieapp/bloc_dependency_injection/feature/home_page/ui/home_page.dart';
+import 'package:movieapp/bloc_dependency_injection/feature/splash_screen.dart';
 
 class RouterApp {
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
       case Routing.ROOT:
+        return MaterialPageRoute(
+          builder: (_) => SplashScreen(),
+        );
+      case Routing.HOME:
         return MaterialPageRoute(
           builder: (_) => HomeScreen(),
         );
